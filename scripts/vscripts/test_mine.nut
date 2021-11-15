@@ -1,6 +1,7 @@
 //=============================================================================//
 //
-// Purpose: Simple land mine, to be used on prop_dynamic
+// Purpose: Simple land mine, to be used on props
+// Think function: MineThink
 //
 //=============================================================================//
 
@@ -9,6 +10,10 @@ const TRIGGER_RADIUS = 100.0;
 const FUSE_TIME = 5.0;
 const EXPLOSION_MAGNITUDE = 500;
 const EXPLOSION_RADIUS = 500;
+const BEEP_SOUND_NAME = "Blitz.TimerBeep";
+
+// Ignore players?
+const bNPCOnly = false;
 
 //-----------------------------------------------------------------------------
 bPrimed <- false;
@@ -21,7 +26,7 @@ nextBeepTime <- 0.0;
 //-----------------------------------------------------------------------------
 function OnPostSpawn()
 {
-	self.PrecacheSoundScript("Blitz.TimerBeep");
+	self.PrecacheSoundScript(BEEP_SOUND_NAME);
 }
 
 //-----------------------------------------------------------------------------
@@ -37,7 +42,7 @@ function MineThink()
 		
 		if (nextBeepTime <= Time())
 		{
-			EmitSoundOn("Blitz.TimerBeep", self);
+			EmitSoundOn(BEEP_SOUND_NAME, self);
 			nextBeepTime = Time() + 0.20;
 		}
 		
@@ -48,7 +53,7 @@ function MineThink()
 	while (ent = Entities.FindInSphere(ent, self.GetOrigin(), TRIGGER_RADIUS))
 	{
 		// Prime on players and npcs
-		if (ent.IsPlayer() || ent.IsNPC())
+		if (ent.IsNPC() || (!bNPCOnly && ent.IsPlayer()))
 		{
 			bPrimed = true;
 			
@@ -65,8 +70,8 @@ function Detonate()
 	
 	local envExplosion = Entities.CreateByClassname("env_explosion");
 	envExplosion.SetOrigin(self.GetOrigin());
-	envExplosion.__KeyValueFromInt("iMagnitude", 500);
-	envExplosion.__KeyValueFromInt("iRadiusOverride", 500);
+	envExplosion.__KeyValueFromInt("iMagnitude", EXPLOSION_MAGNITUDE);
+	envExplosion.__KeyValueFromInt("iRadiusOverride", EXPLOSION_RADIUS);
 	
 	envExplosion.AcceptInput("Explode", "", null, null);
 	envExplosion.AcceptInput("Kill", "", null, null);
