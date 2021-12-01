@@ -12,13 +12,6 @@
 const NMRIH_MAX_PLAYERS = 9;
 
 //-----------------------------------------------------------------------------
-// Declare array for scores
-g_ZombieKills <- []
-
-// Init score array
-for (local i = 0; i < NMRIH_MAX_PLAYERS; i++)
-	g_ZombieKills.append(0);
-	
 // KeyValues for scores
 g_KvScores <- null;
 	
@@ -29,22 +22,24 @@ g_KvScores <- null;
 function OnNPCKilled(event)
 {
 	// Who was it?
-	local plrKiller = GetPlayerByIndex(event.killeridx);
-	if (!plrKiller)
+	local player = GetPlayerByIndex(event.killeridx);
+	if (!player)
 		return;
 		
 	// That's one down
-	local index = plrKiller.entindex();
-	g_ZombieKills[index]++;
+	local kv = g_KvScores.FindKey(player.GetNetworkIDString());
+	if (!kv)
+		return;
+	
+	// Increment kills and save to keyvalues
+	local kills = kv.GetInt();
+	kills++;
+	kv.SetInt(kills);
+	WriteMapKeyValues(g_KvScores);
 	
 	// Announce to the world
-	local name = plrKiller.GetPlayerName();
-	local kills = g_ZombieKills[index];
+	local name = player.GetPlayerName();
 	printl(name + " has killed total of " + kills + " zombies!");
-	
-	// Save to keyvalues
-	g_KvScores.SetKeyInt(plrKiller.GetNetworkIDString(), kills);
-	WriteMapKeyValues(g_KvScores);
 }
 
 //-----------------------------------------------------------------------------
@@ -67,21 +62,6 @@ if (!g_KvScores)
 	g_KvScores = CScriptKeyValues();
 	g_KvScores.SetName("ZombieKills");
 	WriteMapKeyValues(g_KvScores);
-}
-
-// Read keyvalues for each player in-game
-for (local i = 0; i < NMRIH_MAX_PLAYERS; i++)
-{
-	local player = GetPlayerByIndex(i);
-	if (!player)
-		continue;
-	
-	local networkId = player.GetNetworkIDString();
-	local kv = g_KvScores.FindKey(networkId);
-	if (kv)
-	{
-		g_ZombieKills[i] = kv.GetInt();
-	}
 }
 
 // Listen to zombie kills
