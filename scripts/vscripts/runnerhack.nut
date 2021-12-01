@@ -34,7 +34,7 @@ function SpawnRunners(count)
 function ForceRunnerChanceByRuleset(entRuleset, chance)
 {
 	local version = Convars.GetStr("nmrih_version");
-	if (version.find("1.12.1"))
+	if (version.find("1.12.1") != null)
 		entRuleset.AcceptInput("ApplyCvars", format("ov_runner_chance %f", chance), null, null);
 	else
 		RulesetManager.ApplyCvars(format("ov_runner_chance %f", chance));
