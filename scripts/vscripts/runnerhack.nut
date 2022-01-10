@@ -1,6 +1,6 @@
 //=============================================================================//
 //
-// Purpose: Evil logic_ruleset hacking to force a random runner spawn!
+// Purpose: Evil ruleset hacking to force a random runner spawn!
 // Usage: script_execute runnerhack
 //
 //=============================================================================//
@@ -33,11 +33,7 @@ function SpawnRunners(count)
 //-----------------------------------------------------------------------------
 function ForceRunnerChanceByRuleset(entRuleset, chance)
 {
-	local version = Convars.GetStr("nmrih_version");
-	if (version.find("1.12.1") != null)
-		entRuleset.AcceptInput("ApplyCvars", format("ov_runner_chance %f", chance), null, null);
-	else
-		RulesetManager.ApplyCvars(format("ov_runner_chance %f", chance));
+	RulesetManager.ApplyCvars(format("ov_runner_chance %f", chance));
 }
 
 //-----------------------------------------------------------------------------
@@ -51,7 +47,6 @@ while (entZombieSpawn = Entities.FindByClassname(entZombieSpawn, "func_zombie_sp
 }
 
 local savedRunnerChance = Convars.GetFloat("ov_runner_chance");
-local logicRuleset = Entities.CreateByClassname("logic_ruleset");
 
 ForceRunnerChanceByRuleset(logicRuleset, 1.0);
 
