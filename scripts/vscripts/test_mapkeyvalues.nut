@@ -4,12 +4,9 @@
 //				(for each player, saves using SteamID)
 //
 // Usage: script_execute test_mapkeyvalues
+// Warning: Only works in version 1.12.2+
 //
 //=============================================================================//
-
-//-----------------------------------------------------------------------------
-// TODO: Add MAX_PLAYERS constant in C++ :)
-const NMRIH_MAX_PLAYERS = 9;
 
 //-----------------------------------------------------------------------------
 // KeyValues for scores
@@ -45,14 +42,6 @@ function OnNPCKilled(event)
 //-----------------------------------------------------------------------------
 // Main function
 //-----------------------------------------------------------------------------
-
-// Don't try this in retail build yet!
-local version = Convars.GetStr("nmrih_version");
-if (version.find("1.12.1") != null)
-{
-	Warning("unsupported version\n");
-	return;
-}
 
 // Try loading keyvalues for this map
 g_KvScores = ReadMapKeyValues();
