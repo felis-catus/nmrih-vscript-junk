@@ -9,25 +9,42 @@
 
 //-----------------------------------------------------------------------------
 local count = 0;
+local runners = 0;
+local turned = 0;
+local crawlers = 0;
+local armored = 0;
+
 local ent = null;
 while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
 {
 	// Zombies with shambler classname can still become runners,
 	// via inputs, scripts (like this one!), or when ignited
 	if (ent.IsRunner())
+	{
+		runners++;
 		continue;
+	}
 		
 	// Players turned zombies always run
 	if (ent.IsTurned())
+	{
+		turned++;
 		continue;
+	}
 		
 	// While crawlers can become runners, this is for testing the binding
 	if (ent.IsCrawler())
+	{
+		crawlers++;
 		continue;
+	}
 		
 	// Ditto here for armored
 	if (ent.HasArmor())
+	{
+		armored++;
 		continue;
+	}
 
 	// Coming to get ya
 	ent.BecomeRunner();
@@ -36,3 +53,15 @@ while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
 }
 
 printl(count + " zombies became runners!");
+
+if (runners != 0)
+	printl(runners + " were already runners.");
+
+if (turned != 0)
+	printl(turned + " were turned.");
+
+if (crawlers != 0)
+	printl(crawlers + " were crawlers.");
+	
+if (armored != 0)
+	printl(armored + " were armored.");
