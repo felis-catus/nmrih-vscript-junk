@@ -46,6 +46,20 @@ while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
 		continue;
 	}
 
+	// Tap into their scope to add loot drops on death
+	if (ent.ValidateScriptScope())
+	{
+		ent.GetScriptScope().OnDeath <- function()
+		{
+			// Drop some loot
+			self.SpawnLootWeapon("item_gene_therapy");
+			self.SpawnLootAmmo("ammobox_9mm");
+			
+			// Allow to die
+			return true;
+		}
+	}
+
 	// Coming to get ya
 	ent.BecomeRunner();
 	
