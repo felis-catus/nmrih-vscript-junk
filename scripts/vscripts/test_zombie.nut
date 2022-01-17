@@ -14,42 +14,42 @@ local turned = 0;
 local crawlers = 0;
 local armored = 0;
 
-local ent = null;
-while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
+local zombie = null;
+while (zombie = Entities.FindByClassname(zombie, "npc_nmrih_shamblerzombie"))
 {
 	// Zombies with shambler classname can still become runners,
 	// via inputs, scripts (like this one!), or when ignited
-	if (ent.IsRunner())
+	if (zombie.IsRunner())
 	{
 		runners++;
 		continue;
 	}
 		
 	// Players turned zombies always run
-	if (ent.IsTurned())
+	if (zombie.IsTurned())
 	{
 		turned++;
 		continue;
 	}
 		
 	// While crawlers can become runners, this is for testing the binding
-	if (ent.IsCrawler())
+	if (zombie.IsCrawler())
 	{
 		crawlers++;
 		continue;
 	}
 		
 	// Ditto here for armored
-	if (ent.HasArmor())
+	if (zombie.HasArmor())
 	{
 		armored++;
 		continue;
 	}
 
 	// Tap into their scope to add loot drops on death
-	if (ent.ValidateScriptScope())
+	if (zombie.ValidateScriptScope())
 	{
-		ent.GetScriptScope().OnDeath <- function()
+		zombie.GetScriptScope().OnDeath <- function()
 		{
 			// Drop some loot
 			self.SpawnLootWeapon("fa_m92fs");
@@ -62,10 +62,10 @@ while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
 	}
 	
 	// Turn into Hunters!
-	ent.SetModelOverride("models/nmr_zombie/hunter_infected.mdl");
+	zombie.SetModelOverride("models/nmr_zombie/hunter_infected.mdl");
 
 	// Coming to get ya
-	ent.BecomeRunner();
+	zombie.BecomeRunner();
 	
 	count++;
 }
