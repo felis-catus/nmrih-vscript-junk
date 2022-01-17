@@ -52,13 +52,17 @@ while (ent = Entities.FindByClassname(ent, "npc_nmrih_shamblerzombie"))
 		ent.GetScriptScope().OnDeath <- function()
 		{
 			// Drop some loot
-			self.SpawnLootWeapon("item_gene_therapy");
+			self.SpawnLootWeapon("fa_m92fs");
+			self.SpawnLootWeapon("exp_tnt");
 			self.SpawnLootAmmo("ammobox_9mm");
 			
 			// Allow to die
 			return true;
 		}
 	}
+	
+	// Turn into Hunters!
+	ent.SetModelOverride("models/nmr_zombie/hunter_infected.mdl");
 
 	// Coming to get ya
 	ent.BecomeRunner();
