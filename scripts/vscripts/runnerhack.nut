@@ -31,7 +31,7 @@ function SpawnRunners(count)
 }
 
 //-----------------------------------------------------------------------------
-function ForceRunnerChanceByRuleset(entRuleset, chance)
+function ForceRunnerChanceByRuleset(chance)
 {
 	RulesetManager.ApplyCvars(format("ov_runner_chance %f", chance));
 }
@@ -48,9 +48,9 @@ while (entZombieSpawn = Entities.FindByClassname(entZombieSpawn, "func_zombie_sp
 
 local savedRunnerChance = Convars.GetFloat("ov_runner_chance");
 
-ForceRunnerChanceByRuleset(logicRuleset, 1.0);
+ForceRunnerChanceByRuleset(1.0);
 
 SpawnRunners(RUNNER_COUNT);
 
 // Reset on same frame to prevent excess runners
-ForceRunnerChanceByRuleset(logicRuleset, savedRunnerChance);
+ForceRunnerChanceByRuleset(savedRunnerChance);
